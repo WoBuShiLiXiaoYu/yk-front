@@ -158,6 +158,7 @@ export default {
     // vue 开始加载用户信息
     this.loadLoginUser();
   },
+
   methods: {
     // 左侧菜单展示、折叠
     showMenu() {

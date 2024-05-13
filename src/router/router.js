@@ -14,6 +14,11 @@ let router = createRouter({
                 {
                     path: "user",
                     component : () => import('../view/UserView.vue'),
+                },
+                {
+                    // 动态路由
+                    path: "user/:id",
+                    component : () => import('../view/UserDetailView.vue'),
                 }
             ]
         }

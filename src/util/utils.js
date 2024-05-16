@@ -28,7 +28,7 @@ function messagePrompt(msg) {
     return ElMessageBox.confirm(
         // 提示
         msg,
-        'Warning',
+        '系统提醒',
         {
             confirmButtonText: '确定',
             cancelButtonText: '取消',

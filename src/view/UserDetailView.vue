@@ -58,7 +58,7 @@ export default {
     // 加载用户详细信息
     loadUserDetail() {
       let id = this.$route.params.id;
-      doGet("/api/user/userDetailInfo/" + id).then(resp => {
+      doGet("/api/user/userDetailInfo/", {id}).then(resp => {
         if (resp.data.code === 0) {
           this.userDetail = resp.data.data;
         }

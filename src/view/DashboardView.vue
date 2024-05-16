@@ -129,7 +129,7 @@
       </el-header>
       <!--右侧：中-->
       <el-main>
-        <router-view></router-view>
+        <router-view v-if="isRouterAlive"></router-view>
       </el-main>
       <!--右侧：下-->
       <el-footer><a href="javascript:void(0);" style="font-size: small; color: #888888">@版权所有 2024 攀枝花市东区</a>
@@ -150,13 +150,27 @@ export default {
       // 控制左侧菜单展示、折叠
       isCollapse : false,
       // 登录用户
-      user : {}
+      user : {},
+      // 控制页面显示
+      isRouterAlive: true
 
     }
   },
   mounted() {
     // vue 开始加载用户信息
     this.loadLoginUser();
+  },
+
+  // 提供
+  provide() {
+    return {
+      reload: () => {
+        this.isRouterAlive = false;
+        this.$nextTick(() => {
+          this.isRouterAlive = true;
+        })
+      }
+    }
   },
 
   methods: {

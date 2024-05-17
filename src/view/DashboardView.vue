@@ -22,7 +22,7 @@
             <el-icon><OfficeBuilding /></el-icon>
             <span>市场活动</span>
           </template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="/dashboard/activity">
               <el-icon><School /></el-icon>
               市场活动</el-menu-item>
             <el-menu-item index="1-2">

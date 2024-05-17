@@ -301,7 +301,7 @@ export default {
         currentPage: currentPage
       }).then(resp => {
         if (resp.data.code === 0) {
-          console.log(resp)
+          //console.log(resp)
           this.userList = resp.data.data.list;
           this.pageSize = resp.data.data.pageSize;
           this.total = resp.data.data.total;

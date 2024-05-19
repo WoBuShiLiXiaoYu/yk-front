@@ -1,19 +1,20 @@
 <template>
-  <el-form :inline="true" :model="activityQuery">
+  <el-form :inline="true" :model="activityQuery" :rules="activityRules">
 
     <el-form-item label="负责人">
-      <el-select v-model="activityQuery.ownerId" placeholder="请选择负责人" clearable @click="loadOwner()" style="width: 200px">
+      <el-select v-model="activityQuery.ownerId" placeholder="请选择负责人" clearable @click="loadOwner()"
+                 style="width: 200px">
         <el-option
             v-for="item in ownerOption"
             :key="item.id"
             :label="item.name"
-            :value="item.id"
-        />
+            :value="item.id">
+        </el-option>
       </el-select>
     </el-form-item>
 
     <el-form-item label="活动名称">
-      <el-input v-model="activityQuery.name" placeholder="活动名称" clearable />
+      <el-input v-model="activityQuery.name" placeholder="活动名称" clearable/>
     </el-form-item>
 
     <el-form-item label="活动时间">
@@ -22,28 +23,27 @@
           type="datetimerange"
           start-placeholder="开始时间"
           end-placeholder="结束时间"
-          format="YYYY-MM-DD HH:mm:ss"
-          date-format="YYYY/MM/DD ddd"
-          time-format="A hh:mm:ss"/>
+          value-format="YYYY-MM-DD HH:mm:ss">
+      </el-date-picker>
     </el-form-item>
 
-    <el-form-item label="活动预算">
-      <el-input v-model="activityQuery.cost" placeholder="活动预算" clearable />
-    </el-form-item>
+      <el-form-item label="活动预算" prop="cost">
+        <el-input v-model="activityQuery.cost" placeholder="活动预算" clearable/>
+      </el-form-item>
 
+      <el-form-item label="创建时间">
+        <el-date-picker
+            v-model="activityQuery.createTime"
+            type="datetime"
+            placeholder="请选择创建时间"
+            value-format="YYYY-MM-DD HH:mm:ss">
+        </el-date-picker>
+      </el-form-item>
 
-    <el-form-item label="创建时间">
-      <el-date-picker
-          v-model="activityQuery.createTime"
-          type="datetime"
-          placeholder="请选择创建时间"
-      />
-    </el-form-item>
-
-    <el-form-item class="activityButton1">
-      <el-button type="primary" @click="onSearch()">搜 索</el-button>
-      <el-button type="primary" plain @click="onReset()">重 置</el-button>
-    </el-form-item>
+      <el-form-item class="activityButton1">
+        <el-button type="primary" @click="conditionalSearch()">搜 索</el-button>
+        <el-button type="primary" plain @click="onReset()">重 置</el-button>
+      </el-form-item>
   </el-form>
 
   <div class="activityButton">
@@ -102,7 +102,10 @@ export default {
       activityList: [{}],
       pageSize: 0,
       total: 0,
-      ownerOption: [{}]
+      ownerOption: [{}],
+      activityRules: [
+        {pattern: /^[0-9]+(\.[0-9]{2})?$/, message: '活动预算必须为整数或者两位小数', trigger: 'blur'}
+      ]
     }
   },
 
@@ -116,8 +119,25 @@ export default {
 
     // 获取活动集合
     getActivityList(currentPage) {
+
+      let startTime = '';
+      let endTime = '';
+      for (let key in this.activityQuery.activityTime) {
+        if (key === '0') {
+          startTime = this.activityQuery.activityTime[key];
+        }
+        if (key === '1') {
+          endTime = this.activityQuery.activityTime[key];
+        }
+      }
       doGet("/api/activity/activityList", {
-        currentPage: currentPage
+        currentPage: currentPage,
+        ownerId: this.activityQuery.ownerId,
+        name: this.activityQuery.name,
+        cost: this.activityQuery.cost,
+        createTime: this.activityQuery.createTime,
+        startTime: startTime,
+        endTime: endTime
       }).then(resp => {
         if (resp.data.code === 0) {
           //console.log(resp)
@@ -141,7 +161,34 @@ export default {
           this.ownerOption = resp.data.data;
         }
       })
-    }
+    },
+
+    // 条件查询
+    conditionalSearch() {
+      this.getActivityList(1);
+    },
+    // 重置按钮
+    onReset() {
+      this.activityQuery = {}
+    },
+
+    // 录入市场活动
+    add() {
+      this.$router.push("/dashboard/activity/add");
+    },
+
+    // 编辑市场活动按钮
+    edit(id) {
+      this.$router.push("/dashboard/activity/edit/" + id);
+    },
+
+    // 市场活动详情按钮
+    view(id) {
+      this.$router.push("/dashboard/activity/detail/" + id);
+    },
+
+    // 市场活动删除按钮
+    del(id) {}
 
 
   }

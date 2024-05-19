@@ -4,6 +4,7 @@ import App from './App.vue'
 
 // 导入 ElementPlus 组件
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 导入路由
 import router from "./router/router.js";
 // 导入样式
@@ -18,4 +19,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
-app.use(ElementPlus).use(router).mount('#app')
+app.use(ElementPlus, {locale: zhCn}).use(router).mount('#app')

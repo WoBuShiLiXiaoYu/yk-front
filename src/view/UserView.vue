@@ -73,20 +73,32 @@
       </el-form-item>
       <el-form-item label="密码状态" prop="credentialsNoExpired">
         <el-select v-model="userQuery.credentialsNoExpired" placeholder="请选择" style="width: 600px">
-          <el-option label="正常" value="1"/>
-          <el-option label="已过期" value="0"/>
+          <el-option
+              v-for="item in option1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="账号锁定" prop="accountNoLocked">
         <el-select v-model="userQuery.accountNoLocked" placeholder="请选择" style="width: 600px">
-          <el-option label="正常" value="1"/>
-          <el-option label="锁定" value="0"/>
+          <el-option
+              v-for="item in option2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="账号启用" prop="accountEnabled">
         <el-select v-model="userQuery.accountEnabled" placeholder="请选择" style="width: 600px">
-          <el-option label="启用" value="1"/>
-          <el-option label="禁用" value="0"/>
+          <el-option
+              v-for="item in option3"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
         </el-select>
       </el-form-item>
 

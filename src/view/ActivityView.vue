@@ -92,10 +92,14 @@
 </template>
 
 <script>
-import {doGet} from "../http/httpRequest";
+import {doDelete, doGet} from "../http/httpRequest";
+import {messagePrompt, messageTitle} from "../util/utils";
 
 export default {
   name: "ActivityView",
+
+  inject: ['reload'],
+
   data() {
     return {
       activityQuery: {},
@@ -103,6 +107,7 @@ export default {
       pageSize: 0,
       total: 0,
       ownerOption: [{}],
+      activityIdArray: [],
       activityRules: [
         {pattern: /^[0-9]+(\.[0-9]{2})?$/, message: '活动预算必须为整数或者两位小数', trigger: 'blur'}
       ]
@@ -115,7 +120,13 @@ export default {
 
   methods: {
     // // 当选择项发生变化时会触发该事件
-    handleSelectionChange(selectionDataArray) {},
+    handleSelectionChange(selectionDataArray) {
+      this.activityIdArray = [];
+      selectionDataArray.forEach(data => {
+        let id = data.id;
+        this.activityIdArray.push(id);
+      })
+    },
 
     // 获取活动集合
     getActivityList(currentPage) {
@@ -188,8 +199,41 @@ export default {
     },
 
     // 市场活动删除按钮
-    del(id) {}
+    del(id) {
+      messagePrompt("您确定要删除该条市场活动？").then(() => {
+        doDelete("/api/activity/deleteActivity", {id}).then(resp => {
+          if (resp.data.code === 0) {
+            messageTitle("删除市场活动成功！", "success");
+            this.reload();
+          } else {
+            messageTitle("删除市场活动失败！", "error");
+          }
+        })
+      }).catch(() => {
+        messageTitle("取消删除！", "warning");
+      })
+    },
 
+    // 批量删除市场活动
+    batchDel() {
+      if (this.activityIdArray <= 0) {
+        messageTitle("请选择要删除的市场活动", "warning");
+        return;
+      }
+      messagePrompt("您确定要删除已选择的多条市场活动？").then(() => {
+        let ids = this.activityIdArray.join(",");
+        doDelete("/api/activity/batchDeleteActivity", {ids}).then(resp => {
+          if (resp.data.code === 0) {
+            messageTitle("删除市场活动成功！", "success");
+            this.reload();
+          } else {
+            messageTitle("删除市场活动失败！", "error");
+          }
+        })
+      }).catch(() => {
+        messageTitle("取消删除！", "warning");
+      })
+    }
 
   }
 }

@@ -50,7 +50,7 @@
     </el-form-item>
   </el-form>
 
-    <div class="dialog-footer">
+    <div class="button-footer">
       <el-button type="primary" @click="activitySubmit()">提 交</el-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <el-button @click="goHistory()">返 回</el-button>
@@ -172,7 +172,7 @@ export default {
 </script>
 
 <style scoped>
- .dialog-footer {
+ .button-footer {
    margin-left: 35%;
    margin-top: 100px;
  }

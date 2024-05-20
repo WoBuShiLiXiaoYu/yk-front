@@ -35,7 +35,7 @@
             <el-icon><Operation /></el-icon>
             <span>线索管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="/dashboard/clue">
             <el-icon><Document /></el-icon>
             线索管理</el-menu-item>
           <el-menu-item index="1-2">

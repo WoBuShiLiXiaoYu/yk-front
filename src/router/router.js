@@ -36,6 +36,10 @@ let router = createRouter({
                     path: "activity/detail/:id",
                     component : () => import('../view/ActivityDetailView.vue'),
                 },
+                {
+                    path: "clue",
+                    component : () => import('../view/ClueView.vue'),
+                },
             ]
         }
     ]

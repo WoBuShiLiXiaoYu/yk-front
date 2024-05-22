@@ -25,9 +25,9 @@
             <el-menu-item index="/dashboard/activity">
               <el-icon><School /></el-icon>
               市场活动</el-menu-item>
-            <el-menu-item index="1-2">
+<!--            <el-menu-item index="1-2">
               <el-icon><Histogram /></el-icon>
-              市场统计</el-menu-item>
+              市场统计</el-menu-item>-->
         </el-sub-menu>
 
         <el-sub-menu index="2">
@@ -38,9 +38,9 @@
           <el-menu-item index="/dashboard/clue">
             <el-icon><Document /></el-icon>
             线索管理</el-menu-item>
-          <el-menu-item index="1-2">
+<!--          <el-menu-item index="1-2">
             <el-icon><Histogram /></el-icon>
-            线索统计</el-menu-item>
+            线索统计</el-menu-item>-->
         </el-sub-menu>
 
         <el-sub-menu index="3">
@@ -51,9 +51,9 @@
           <el-menu-item index="1-1">
             <el-icon><Document /></el-icon>
             客户管理</el-menu-item>
-          <el-menu-item index="1-2">
+<!--          <el-menu-item index="1-2">
             <el-icon><Histogram /></el-icon>
-            客户统计</el-menu-item>
+            客户统计</el-menu-item>-->
         </el-sub-menu>
 
         <el-sub-menu index="4">

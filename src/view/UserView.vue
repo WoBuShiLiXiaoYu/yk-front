@@ -270,7 +270,7 @@ export default {
         ],
         phone: [
           { required: true, message: '请输入用户手机号码', trigger: 'blur' },
-          {pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, message: '手机号码格式有误', trigger: 'blur'}
+          {pattern:  /^1[3-9]\d{9}$/, message: '手机号码格式有误', trigger: 'blur'}
         ],
         email: [
           { required: true, message: '请输入用户邮箱', trigger: 'blur' },

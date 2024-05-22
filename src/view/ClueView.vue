@@ -14,7 +14,7 @@
     <el-table-column property="activityName" label="所属活动" show-overflow-tooltip />
     <el-table-column label="姓名" show-overflow-tooltip >
       <template #default="scope">
-        <a href="javescript:void(0)" @click="view(scope.row.id)"> {{scope.row.fullName}} </a>
+        <a href="javescript:" @click="view(scope.row.id)"> {{scope.row.fullName}} </a>
       </template>
     </el-table-column>
     <el-table-column property="appellationName" label="称呼" show-overflow-tooltip />
@@ -155,6 +155,21 @@ export default {
     // 导入文件按钮
     submitExcel() {
       this.$refs.uploadRef.submit();
+    },
+
+    // 录入线索按钮
+    addClue() {
+      this.$router.push("/dashboard/clue/add");
+    },
+
+    // 编辑按钮
+    edit(id) {
+      this.$router.push("/dashboard/clue/edit/" + id);
+    },
+
+    // 详情
+    view(id) {
+      this.$router.push("/dashboard/clue/detail/" + id);
     }
   }
 }

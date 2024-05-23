@@ -37,9 +37,28 @@ function messagePrompt(msg) {
     )
 }
 
+function getToken() {
+    let token = window.sessionStorage.getItem(getTokenName());
+    if (!token) {
+        token = window.localStorage.getItem(getTokenName());
+    }
+    if (token) {
+        return token;
+    } else {
+        messagePrompt("token 已过期！是否重新登录？").then(() => {
+            removeToken();
+            // 跳转到登录页
+            window.location.href = "/";
+        }).catch(() => {
+            messageTitle("取消登录！", "warning")
+        })
+    }
+}
+
 export {
     messageTitle,
     getTokenName,
     removeToken,
-    messagePrompt
+    messagePrompt,
+    getToken
 }

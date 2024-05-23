@@ -82,7 +82,7 @@
     <div class="button-footer">
       <el-button type="primary" @click="clueRemarkSubmit()">提 交</el-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <el-button type="success" @click="convertCustomer()">转换客户</el-button>
+      <el-button type="success" @click="convertCustomer()" v-if="clueDetail.clueState !== '已转客户'">转换客户</el-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <el-button @click="goHistory()">返 回</el-button>
     </div>
@@ -116,9 +116,8 @@
                  @next-click="toPage"
                  @current-change="toPage"/>
 
-  <!-- 编辑线索跟踪信息 -->
+  <!-- 编辑线索跟踪信息弹窗 -->
   <el-dialog v-model="editDialogVisible" title="编辑线索跟踪备注信息" center width="45%" draggable>
-
     <el-form :model="editRemarkQuery" label-width="30%" style="max-width: 600px" ref="editRemarkFormRef" :rules="editRemarkRules">
       <el-form-item label="线索跟踪" prop="noteContent">
         <el-input
@@ -130,7 +129,6 @@
         />
       </el-form-item>
     </el-form>
-
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="editDialogVisible = false">关 闭</el-button>
@@ -139,11 +137,54 @@
     </template>
   </el-dialog>
 
+  <!-- 线索转换客户弹窗 -->
+  <el-dialog v-model="convertCustomerDialogVisible" title="线索转换客户" center width="45%" draggable>
+
+    <el-form :model="toCustomerQuery" label-width="30%" style="max-width: 600px" ref="toCustomerFormRef"
+             :rules="toCustomerRules">
+      <el-form-item label="意向产品" prop="product">
+        <el-select v-model="toCustomerQuery.product" placeholder="请选择意向产品" style="width: 1000px" @click="loadProduct()">
+          <el-option
+              v-for="item in productOption"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="客户描述" prop="description">
+        <el-input
+            v-model="toCustomerQuery.description"
+            style="width: 1000px"
+            :rows="8"
+            type="textarea"
+            placeholder="请输入客户描述信息"
+        />
+      </el-form-item>
+      <el-form-item label="下次联系时间" prop="nextContactTime">
+        <el-date-picker
+            v-model="toCustomerQuery.nextContactTime"
+            type="datetime"
+            placeholder="请选择下次联系时间"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            style="width: 1000px">
+        </el-date-picker>
+      </el-form-item>
+    </el-form>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="convertCustomerDialogVisible = false">关 闭</el-button>
+        <el-button type="success" @click="conversionSubmit()">转 换</el-button>
+      </div>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script>
-import {doGet, doPost} from "../http/httpRequest";
-import {messageTitle} from "../util/utils";
+import {doDelete, doGet, doPost, doPut} from "../http/httpRequest";
+import {messagePrompt, messageTitle} from "../util/utils";
 
 export default {
   name: "ClueDetailView",
@@ -154,12 +195,27 @@ export default {
       clueDetail: {},
       clueRemark: {},
       noteWayOption: [{}],
+      productOption: [{}],
       clueRemarkList: [{}],
       pageSize: 0,
       total: 0,
       editDialogVisible: false,
+      convertCustomerDialogVisible: false,
+      toCustomerQuery: {},
       editRemarkQuery: {},
-      clueRemarkRules: {}
+      clueRemarkRules: {},
+      toCustomerRules: {
+        product: [
+          { required: true, message: '请选择意向产品', trigger: ['blur', 'change'] }
+        ],
+        description: [
+          { required: true, message: '请输入客户描述信息', trigger: 'blur' },
+          { min: 5, max: 255, message: '客户描述信息为5-255个字符', trigger: 'blur' }
+        ],
+        nextContactTime: [
+          { required: true, message: '请选择下次联系时间', trigger: ['blur', 'change'] }
+        ]
+      }
     }
   },
 
@@ -232,7 +288,77 @@ export default {
     // 编辑按钮
     edit(id) {
       this.editDialogVisible = true;
+      doGet("/api/clueRemark/getNoteContent/" + id).then(resp => {
+        if (resp.data.code === 0) {
+          this.editRemarkQuery = resp.data.data;
+        }
+      })
+    },
 
+    // 编辑提交按钮
+    editRemarkSubmit() {
+      doPut("/api/clueRemark/editClueRemark", {
+        id: this.editRemarkQuery.id,
+        noteContent: this.editRemarkQuery.noteContent
+      }).then(resp => {
+        if (resp.data.code === 0) {
+          messageTitle("编辑线索跟踪信息成功!", "success");
+          this.reload();
+        } else {
+          messageTitle("编辑线索跟踪信息失败！", "error");
+        }
+      })
+    },
+
+    // 删除按钮
+    del(id) {
+      messagePrompt("您确定要删除该条跟踪信息？").then(() => {
+        doDelete("/api/clueRemark/deleteClueRemark/" + id).then(resp => {
+          if (resp.data.code === 0) {
+            messageTitle("删除线索跟踪信息成功！", "success");
+            this.reload();
+          } else {
+            messageTitle("删除线索跟踪信息失败！", "error");
+          }
+        })
+      }).catch(() => {
+        messageTitle("取消删除！", "warning");
+      })
+    },
+
+    // 加载意向产品
+    loadProduct() {
+      doGet("/api/product/getProductNameList").then(resp => {
+        if (resp.data.code === 0) {
+          this.productOption = resp.data.data;
+        }
+      })
+    },
+
+    // 转换客户按钮
+    convertCustomer() {
+      this.convertCustomerDialogVisible = true;
+    },
+
+    // 转换客户弹窗转换提交按钮
+    conversionSubmit() {
+      this.$refs.toCustomerFormRef.validate((isValid) => {
+        if (isValid) {
+          doPost("/api/customer/conversionCustomer", {
+            clueId: this.clueDetail.id,
+            product: this.toCustomerQuery.product,
+            description: this.toCustomerQuery.description,
+            nextContactTime: this.toCustomerQuery.nextContactTime
+          }).then(resp => {
+            if (resp.data.code === 0) {
+              messageTitle("转换客户成功！", "success");
+              this.reload();
+            } else {
+              messageTitle("转换客户失败！", "error");
+            }
+          })
+        }
+      })
     }
 
   }

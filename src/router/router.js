@@ -52,6 +52,10 @@ let router = createRouter({
                     path: "clue/detail/:id",
                     component : () => import('../view/ClueDetailView.vue'),
                 },
+                {
+                    path: "customer",
+                    component : () => import('../view/CustomerView.vue'),
+                },
             ]
         }
     ]

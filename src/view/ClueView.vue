@@ -23,7 +23,12 @@
     <el-table-column property="isNeedLoan" label="是否贷款" show-overflow-tooltip />
     <el-table-column property="intentionStateType" label="意向状态" show-overflow-tooltip />
     <el-table-column property="intentionProductName" label="意向产品" show-overflow-tooltip />
-    <el-table-column property="clueState" label="线索状态" show-overflow-tooltip />
+    <el-table-column property="clueState" label="线索状态" show-overflow-tooltip >
+      <template #default="scope">
+        <span style="background: lemonchiffon" v-if="scope.row.clueState == '已转客户'"> {{scope.row.clueState}} </span>
+        <span v-else> {{scope.row.clueState}} </span>
+      </template>
+    </el-table-column>
     <el-table-column property="clueSource" label="线索来源" show-overflow-tooltip />
     <el-table-column property="nextContactTime" label="下次联系时间" width="200" show-overflow-tooltip />
     <el-table-column label="操作" width="230" >
@@ -84,8 +89,8 @@
 </template>
 
 <script>
-import {doGet, doPost} from "../http/httpRequest";
-import {messageTitle} from "../util/utils";
+import {doDelete, doGet, doPost} from "../http/httpRequest";
+import {messagePrompt, messageTitle} from "../util/utils";
 
 export default {
   name: "ClueView",
@@ -96,6 +101,7 @@ export default {
       pageSize: 0,
       total: 0,
       importDialogVisible: false,
+      clueIdArray: []
     }
   },
 
@@ -104,7 +110,13 @@ export default {
   },
 
   methods: {
-    handleSelectionChange() {},
+    handleSelectionChange(selectionDataArray) {
+      this.clueIdArray = [];
+      selectionDataArray.forEach(data => {
+        let id = data.id;
+        this.clueIdArray.push(id);
+      })
+    },
 
     // 获取线索列表
     getClueList(currentPage) {
@@ -170,6 +182,43 @@ export default {
     // 详情
     view(id) {
       this.$router.push("/dashboard/clue/detail/" + id);
+    },
+
+    // 删除按钮
+    del(id) {
+      messagePrompt("您确定要删除该条线索？").then(() => {
+        doDelete("/api/clue/deleteClue/" + id).then(resp => {
+          if (resp.data.code === 0) {
+            messageTitle("删除线索成功！", "success");
+            this.reload();
+          } else {
+            messageTitle("删除线索失败！", "error");
+          }
+        })
+      }).catch(() => {
+        messageTitle("取消删除！", "warning");
+      })
+    },
+
+    // 批量删除
+    batchDelClue() {
+      if (this.clueIdArray <= 0) {
+        messageTitle("请选择要删除的线索", "warning");
+        return;
+      }
+      messagePrompt("您确定要删除已选择的多条线索？").then(() => {
+        let ids = this.clueIdArray.join(",");
+        doDelete("/api/clue/batchDeleteClue", {ids}).then(resp => {
+          if (resp.data.code === 0) {
+            messageTitle("删除线索成功！", "success");
+            this.reload();
+          } else {
+            messageTitle("删除线索失败！", "error");
+          }
+        })
+      }).catch(() => {
+        messageTitle("取消删除！", "warning");
+      })
     }
   }
 }

@@ -8,7 +8,7 @@
           active-text-color="#ffd04b"
           background-color="#545c64"
           class="el-menu-vertical-demo"
-          default-active="2"
+          :default-active="currentRoutePath"
           text-color="#fff"
           style="border-right: solid 0px"
           :unique-opened="true"
@@ -48,7 +48,7 @@
             <el-icon><User /></el-icon>
             <span>客户管理</span>
           </template>
-          <el-menu-item index="1-1">
+          <el-menu-item index="/dashboard/customer">
             <el-icon><Document /></el-icon>
             客户管理</el-menu-item>
 <!--          <el-menu-item index="1-2">
@@ -152,13 +152,15 @@ export default {
       // 登录用户
       user : {},
       // 控制页面显示
-      isRouterAlive: true
+      isRouterAlive: true,
+      currentRoutePath: ''
 
     }
   },
   mounted() {
     // vue 开始加载用户信息
     this.loadLoginUser();
+    this.setCurrentRoutPath();
   },
 
   // 提供
@@ -204,6 +206,18 @@ export default {
           })
         }
       })
+    },
+
+    // 设置导航展开
+    setCurrentRoutPath() {
+      let path = this.$route.path;
+      let arr = path.split("/");
+      if (arr.length > 3) {
+        path = "/" + arr[1] + "/" + arr[2];
+        this.currentRoutePath = path;
+      } else {
+        this.currentRoutePath = path;
+      }
     }
   }
 }

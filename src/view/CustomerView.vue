@@ -137,6 +137,11 @@ export default {
       let ids = this.customerIdArray.join(",");
       this.exportExcel(ids);
       this.reload();
+    },
+
+    // 跳转客户详情按钮
+    view(id) {
+      this.$router.push("/dashboard/customer/detail/" + id);
     }
   }
 }

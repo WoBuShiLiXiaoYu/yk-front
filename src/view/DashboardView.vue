@@ -17,7 +17,20 @@
           :collapse-transition="false">
 
         <div class="menuTitle" v-if="!isCollapse">@云·客管理系统</div>
-        <el-sub-menu index="1">
+
+
+        <el-sub-menu :index="index" v-for="(menuPermission, index) in user.menuPermissionList" :key="menuPermission.id">
+          <template #title>
+            <el-icon><component :is="menuPermission.icon"/></el-icon>
+            <span>{{ menuPermission.name }}</span>
+          </template>
+          <el-menu-item v-for="childPermission in menuPermission.childList" :key="childPermission.id" :index="childPermission.url">
+            <el-icon><component :is="childPermission.icon"/></el-icon>
+            <span>{{ childPermission.name }}</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+<!--        <el-sub-menu index="1">
           <template #title>
             <el-icon><OfficeBuilding /></el-icon>
             <span>市场活动</span>
@@ -25,9 +38,9 @@
             <el-menu-item index="/dashboard/activity">
               <el-icon><School /></el-icon>
               市场活动</el-menu-item>
-<!--            <el-menu-item index="1-2">
+&lt;!&ndash;            <el-menu-item index="1-2">
               <el-icon><Histogram /></el-icon>
-              市场统计</el-menu-item>-->
+              市场统计</el-menu-item>&ndash;&gt;
         </el-sub-menu>
 
         <el-sub-menu index="2">
@@ -38,9 +51,9 @@
           <el-menu-item index="/dashboard/clue">
             <el-icon><Document /></el-icon>
             线索管理</el-menu-item>
-<!--          <el-menu-item index="1-2">
+&lt;!&ndash;          <el-menu-item index="1-2">
             <el-icon><Histogram /></el-icon>
-            线索统计</el-menu-item>-->
+            线索统计</el-menu-item>&ndash;&gt;
         </el-sub-menu>
 
         <el-sub-menu index="3">
@@ -51,9 +64,9 @@
           <el-menu-item index="/dashboard/customer">
             <el-icon><Document /></el-icon>
             客户管理</el-menu-item>
-<!--          <el-menu-item index="1-2">
+&lt;!&ndash;          <el-menu-item index="1-2">
             <el-icon><Histogram /></el-icon>
-            客户统计</el-menu-item>-->
+            客户统计</el-menu-item>&ndash;&gt;
         </el-sub-menu>
 
         <el-sub-menu index="4">
@@ -104,7 +117,7 @@
           <el-menu-item index="1-1">
             <el-icon><Platform /></el-icon>
             系统管理</el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu>-->
       </el-menu>
     </el-aside>
     <!--右侧-->
@@ -184,6 +197,7 @@ export default {
     // 加载当前登录用户
     loadLoginUser() {
       doGet("/api/user/login/info", null).then(resp => {
+        /*console.log(resp)*/
         this.user = resp.data.data.user;
       })
     },

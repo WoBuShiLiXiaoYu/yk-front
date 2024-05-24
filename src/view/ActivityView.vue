@@ -206,7 +206,7 @@ export default {
             messageTitle("删除市场活动成功！", "success");
             this.reload();
           } else {
-            messageTitle("删除市场活动失败！", "error");
+            messageTitle(resp.data.msg, "error");
           }
         })
       }).catch(() => {
@@ -227,7 +227,7 @@ export default {
             messageTitle("删除市场活动成功！", "success");
             this.reload();
           } else {
-            messageTitle("删除市场活动失败！", "error");
+            messageTitle(resp.data.msg, "error");
           }
         })
       }).catch(() => {

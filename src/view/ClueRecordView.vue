@@ -328,7 +328,7 @@ export default {
                 messageTitle("编辑线索成功！", "success");
                 this.$router.push("/dashboard/clue");
               } else {
-                messageTitle("编辑线索失败！", "error");
+                messageTitle(resp.data.msg, "error");
               }
             })
           } else {
@@ -338,7 +338,7 @@ export default {
                 messageTitle("录入线索成功！", "success");
                 this.$router.push("/dashboard/clue");
               } else {
-                messageTitle("录入线索失败！", "error");
+                messageTitle(resp.data.msg, "error");
               }
             })
           }

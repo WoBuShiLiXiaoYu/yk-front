@@ -168,7 +168,7 @@ export default {
               messageTitle("添加市场活动备注信息成功！", "success");
               this.reload();
             } else {
-              messageTitle("添加市场活动备注信息失败！", "error");
+              messageTitle("添加市场活动备注信息失败！原因：" + resp.data.msg, "error");
             }
           })
         }

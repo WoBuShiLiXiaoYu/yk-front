@@ -133,7 +133,7 @@ export default {
                 messageTitle("编辑市场活动成功！", "success");
                 this.$router.push("/dashboard/activity");
               } else {
-                messageTitle("编辑市场活动失败！", "error");
+                messageTitle(resp.data.msg, "error");
               }
             })
           } else {
@@ -144,7 +144,7 @@ export default {
                 // 刷新页面
                 this.reload();
               } else {
-                messageTitle("录入市场活动失败！", "error");
+                messageTitle(resp.data.msg, "error");
               }
             })
           }

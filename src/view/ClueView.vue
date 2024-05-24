@@ -156,7 +156,7 @@ export default {
             messageTitle("文件导入成功！", "success");
             this.reload();
           } else {
-            messageTitle("文件导入失败！", "error");
+            messageTitle(resp.data.msg, "error");
           }
         })
       } else {
@@ -192,7 +192,7 @@ export default {
             messageTitle("删除线索成功！", "success");
             this.reload();
           } else {
-            messageTitle("删除线索失败！", "error");
+            messageTitle("删除线索失败！原因：" + resp.data.msg, "error");
           }
         })
       }).catch(() => {
@@ -213,7 +213,7 @@ export default {
             messageTitle("删除线索成功！", "success");
             this.reload();
           } else {
-            messageTitle("删除线索失败！", "error");
+            messageTitle("删除线索失败！原因：" + resp.data.msg, "error");
           }
         })
       }).catch(() => {

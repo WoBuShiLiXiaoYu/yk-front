@@ -12,6 +12,10 @@ let router = createRouter({
             component : () => import('../view/DashboardView.vue'),
             children: [
                 {
+                    path: "",
+                    component : () => import('../view/StatisticView.vue'),
+                },
+                {
                     path: "user",
                     component : () => import('../view/UserView.vue'),
                 },
@@ -55,6 +59,10 @@ let router = createRouter({
                 {
                     path: "customer",
                     component : () => import('../view/CustomerView.vue'),
+                },
+                {
+                    path: "customer/detail/:id",
+                    component : () => import('../view/CustomerDetailView.vue'),
                 },
             ]
         }

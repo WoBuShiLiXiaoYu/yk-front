@@ -262,7 +262,7 @@ export default {
           messageTitle("添加跟踪方式成功！", "success");
           this.reload();
         } else {
-          messageTitle("添加跟踪方式失败！", "error");
+          messageTitle(resp.data.msg, "error");
         }
       })
     },
@@ -305,7 +305,7 @@ export default {
           messageTitle("编辑线索跟踪信息成功!", "success");
           this.reload();
         } else {
-          messageTitle("编辑线索跟踪信息失败！", "error");
+          messageTitle(resp.data.msg, "error");
         }
       })
     },
@@ -318,7 +318,7 @@ export default {
             messageTitle("删除线索跟踪信息成功！", "success");
             this.reload();
           } else {
-            messageTitle("删除线索跟踪信息失败！", "error");
+            messageTitle(resp.data.msg, "error");
           }
         })
       }).catch(() => {
@@ -354,7 +354,7 @@ export default {
               messageTitle("转换客户成功！", "success");
               this.reload();
             } else {
-              messageTitle("转换客户失败！", "error");
+              messageTitle(resp.data.msg, "error");
             }
           })
         }

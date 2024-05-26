@@ -64,6 +64,26 @@ let router = createRouter({
                     path: "customer/detail/:id",
                     component : () => import('../view/CustomerDetailView.vue'),
                 },
+                {
+                    path: "tran",
+                    component : () => import('../view/TranView.vue'),
+                },
+                {
+                    path: "product",
+                    component : () => import('../view/ProductView.vue'),
+                },
+                {
+                    path: "dictype",
+                    component : () => import('../view/DicTypeView.vue'),
+                },
+                {
+                    path: "dicvalue",
+                    component : () => import('../view/DicValueView.vue'),
+                },
+                {
+                    path: "system",
+                    component : () => import('../view/SystemView.vue'),
+                },
             ]
         }
     ]

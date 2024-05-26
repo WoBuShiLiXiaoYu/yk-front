@@ -2,7 +2,8 @@ import axios from "axios";
 import {getTokenName, messagePrompt, messageTitle, removeToken} from "../util/utils";
 import ElMessage, {ElMessageBox} from "element-plus";
 
-axios.defaults.baseURL = "http://localhost:8089"
+//axios.defaults.baseURL = "http://localhost:8089"
+axios.defaults.baseURL = "http://1.14.72.183:8089"
 
 // get 请求(查询)
 function doGet(url, params) {

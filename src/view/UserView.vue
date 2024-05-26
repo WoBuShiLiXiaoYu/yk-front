@@ -196,6 +196,7 @@
 <script>
 import {doDelete, doGet, doPost, doPut} from "../http/httpRequest";
 import {messagePrompt, messageTitle} from "../util/utils";
+//import al from "../../dist/assets/StatisticView-DjSMkAkF";
 
 export default {
   name: "User",
@@ -426,7 +427,7 @@ export default {
       }
       this.$refs.editUserFormRef.validate(isValidate => {
         if (isValidate) {
-          doPut("/api/user/editUserInfo", {formData}).then(resp => {
+          doPut("/api/user/editUserInfo", formData).then(resp => {
             if (resp.data.code === 0) {
               messageTitle("编辑用户成功！", "success");
               // 刷新页面
